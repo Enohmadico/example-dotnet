@@ -18,7 +18,8 @@ jobs:
                 node-version: "2.1.x"
             - name: Install Dependencies
               run: |
+                cd example-dotnet
                 dotnet restore
-            - name: build step 
+            - name: build  step 
               run: |
-                dotnet-build --configuration debug --output ./resources/dotnet-ouptput
+                dotnet build --configuration debug --output ./example-dotnetdotnet/    -ouptput
