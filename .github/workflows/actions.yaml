@@ -13,6 +13,7 @@ jobs:
     build:
         runs-on: windows-latest
         steps:
+
             - name: checkout step 
               uses: actions/checkout@v4
             - name: Set up donet 
@@ -26,16 +27,16 @@ jobs:
             - name: build  step 
               run: |
                 cd example-dotnet
-                 
-                    dotnet build --configuration debug --output example-dotnetdotnet\example
+                 dotnet build --configuration debug --output example-dotnetdotnet\example
             - name: publish step
               run: |
                  dotnet publish  example-dotnet\example-dotnet.csproj -c Debug -o example-dotnet\publish 
-            - name: upload step 
+
+            - name: upload artifacts 
               uses: actions/upload-artifact@v4
               with:
-                 name: exam 
-                 path: example-dotnet\publish
+                 name: exam-artifacts  
+                 path: example-dotnet\publish**
                  if-no-files-found: fail
 
 
