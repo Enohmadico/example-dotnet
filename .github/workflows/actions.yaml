@@ -7,6 +7,7 @@ on:
     branches:
       - DEV
   workflow_dispatch:
+ 
 
 jobs:
   build:
@@ -15,12 +16,16 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
+      - name: output the github action
+        run: |
+           write-host "This workflow was triggered by:${{github.actor}} "
+
+
 
       - name: Set Up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "6.0.x"  # Specify your .NET version here
-
+          dotnet-version: "6.0.x"  
       - name: Install Dependencies
         run: |
           cd example-dotnet
