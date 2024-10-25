@@ -31,7 +31,11 @@ jobs:
             - name: publish step
               run: |
                  dotnet publish  example-dotnet\example-dotnet.csproj -c Debug -o example-dotnet\publish 
-            
+            - name: upload step 
+              uses: actions/upload-artifact@v4
+              with:
+                 name: exam 
+                 path: xample-dotnet\publish
                 
 
 
