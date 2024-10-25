@@ -27,4 +27,4 @@ jobs:
                     dotnet build --configuration debug --output ./example-dotnetdotnet/artifacts
             - name: list directories after build 
               run: |
-                 Get-childitem ./example-dotnetdotnet/artifacts
+                 Get-childitem ./example-dotnetdotnet
