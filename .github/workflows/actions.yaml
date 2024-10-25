@@ -7,7 +7,8 @@ on:
     branches:
       - DEV
   workflow_dispatch:
- 
+env:
+  WEBAPP_NAME: edwin-dotnet
 
 jobs:
   build:
@@ -16,7 +17,7 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
-      - name: output the github action
+      - name: output the github actor
         run: |
            write-host "This workflow was triggered by:${{github.actor}} "
 
@@ -46,3 +47,31 @@ jobs:
           name: exam-artifacts
           path: example-dotnet/publish/**
           if-no-files-found: error
+  deploy:
+      needs: build
+      runs-on: windows-latest
+      environment: 
+        name: DEVELOPMENT
+        url: ${{steps.link.outputs.webapp-url}}
+      
+      steps:
+        - name: Download Artifact
+          uses: actions/Download-artifact@v4
+          with:
+            name: custom-output
+            path: it the path that the downloaded artifact will be kept 
+        - name: Webdeploy step
+          id: link
+          uses: azure/webapps-deploy@v2
+          with:
+            app-name: ${{env.WEBAPP_NAME}}
+            publish-profile: ${{ secrets.azureWebAppPublishProfile }}
+            package: "."
+
+        - name: display done  deploying in to azure 
+          run : |
+            write-host " deploy in to azure"
+    
+
+
+          
