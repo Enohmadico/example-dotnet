@@ -35,7 +35,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                  name: exam 
-                 path: xample-dotnet\publish
+                 path: example-dotnet\publish
                  if-no-files-found: fail
 
 
