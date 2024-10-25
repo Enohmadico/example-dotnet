@@ -58,7 +58,7 @@ jobs:
         - name: Download Artifact
           uses: actions/Download-artifact@v4
           with:
-            name: custom-output
+            name: exam-artifacts
             path: it the path that the downloaded artifact will be kept 
         - name: Webdeploy step
           id: link
