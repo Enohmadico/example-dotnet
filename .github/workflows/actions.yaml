@@ -36,7 +36,7 @@ jobs:
               with:
                  name: exam 
                  path: xample-dotnet\publish
-                
+                 if-no-files-found: fail
 
 
 
