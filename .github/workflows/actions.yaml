@@ -21,9 +21,8 @@ jobs:
       - name: output the github actor
         run: |
            write-host "This workflow was triggered by:${{github.actor}} "
-
-
-
+           Write-Host "GITHUB_ACTION: $env:GITHUB_ACTION"
+           Write-Host "GITHUB_ENV: $env:GITHUB_ENV"
       - name: Set Up .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -66,7 +65,7 @@ jobs:
           uses: azure/webapps-deploy@v2
           with:
             app-name: ${{env.WEBAPP_NAME}}
-            publish-profile: ${{ secrets.UREWEBAPPPUBLISHPROFILE }}
+            publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE }}
             package: "."
 
         - name: display done  deploying in to azure 
