@@ -1,0 +1,101 @@
+
+#Done by Marccelus T. Enoh
+name: "my oficial webapp github actions"
+run-name: Webapps_Workflow
+on:
+  push:
+    branches:
+      - main
+      - DEV
+      
+  pull_request:
+    branches: 
+      - main
+      - DEV
+  workflow_dispatch:
+env:
+  DOTNET_ROOT: "."
+  AZURE_WEBAPP_NAME: 'bush123'
+
+jobs:
+  Build:
+    name: "Dotnet Build job"
+    runs-on: windows-latest
+    outputs:
+      cartArtifact: ${{steps.output_artifact.outputs.artifact-id}}
+    steps:
+      - name: "checkout step"
+        uses: actions/checkout@v4
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.nuget/packages
+          # Add any additional directories to cache if needed
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-       
+      - name: "Running inline script"
+        run: |
+          Write-Host "setting up the environment now"
+      - name: "GITHUB_ACTOR"
+        run: |
+          Write-Host "GITHUB_ACTOR IS : $env.GITHUB_ACTOR"
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 3.0.x
+      - name: Restore Dependencies 
+        run: dotnet restore
+      - name: Build_STEP"
+        run: dotnet build --configuration Debug
+      - name: Value of env.DOTNET_ROOT
+        run: |
+          Write-Host "DOTNET_ROOT is ${{env.DOTNET_ROOT}}"
+          dir "${{env.DOTNET_ROOT}}"
+          Write-Host "GITHUB_WORKSPACE: $env:GITHUB_WORKSPACE"
+          dir "$env:GITHUB_WORKSPACE"
+      - name: Publish build artifact
+        run: |
+           dotnet publish example-dotnet/example-dotnet.csproj -c Debug -o "${{env.DOTNET_ROOT}}/SimpleWebAppMVC"
+      - name: List published files
+        run: |
+          Write-Host "Listing files in ${{env.DOTNET_ROOT}}/SimpleWebAppMVC"
+          dir "$env:GITHUB_WORKSPACE/SimpleWebAppMVC"
+      - name: Value of env.DOTNET_ROOT AGAIN
+        run: |
+          Write-Host "DOTNET_ROOT is ${{env.DOTNET_ROOT}}"
+          dir "${{env.DOTNET_ROOT}}"
+          Write-Host "GITHUB_WORKSPACE: $env:GITHUB_WORKSPACE"
+          dir "$env:GITHUB_WORKSPACE"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        id: output_artifact
+        with:
+           name: drop
+           path: "${{env.DOTNET_ROOT}}/SimpleWebAppMVC"
+           if-no-files-found: error
+      - name: End of Build stage
+        run: |
+          Write-Host "Artifact created"
+  Deploy_To_Dev:
+    needs: Build
+    name: Deploying To Webapp Service
+    environment:
+      name: 'Production'
+      url: ${{steps.deploy-to-webapp.outputs.webapp-url}}
+    runs-on: windows-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4    
+        with:
+          name: drop
+      - name: IF-ARTIFACT
+        run: dir .
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.TESTING_DEV_PUBLISH_PROFILE}}
+          package: .
