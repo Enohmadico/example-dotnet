@@ -73,7 +73,7 @@ jobs:
         id: output_artifact
         with:
            name: drop
-           path: "${{env.DOTNET_ROOT}}/SimpleWebAppMVC"
+           path: "${{env.DOTNET_ROOT}}/example-dotnet"
            if-no-files-found: error
       - name: End of Build stage
         run: |
