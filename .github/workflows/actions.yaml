@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd example-dotnet
-          dotnet restore
+          dotnet restore ./C:\Users\enohe\Downloads\SANDBOX\example-dotnet\example-dotnet
 
       - name: Build Step
         run: |
