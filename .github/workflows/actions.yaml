@@ -1,77 +1,77 @@
 
-name: example-dotnet
-run-name: example-dotnet app
+# name: example-dotnet
+# run-name: example-dotnet app
 
-on: 
-  push:
-    branches:
-      - DEV
-  workflow_dispatch:
+# on: 
+#   push:
+#     branches:
+#       - DEV
+#   workflow_dispatch:
 
-env:
-  WEBAPP_NAME: bush123
+# env:
+#   WEBAPP_NAME: bush123
 
-jobs:
-  build:
-    runs-on: windows-latest
-    steps:
+# jobs:
+#   build:
+#     runs-on: windows-latest
+#     steps:
 
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: output the github actor
-        run: |
-           write-host "This workflow was triggered by:${{github.actor}} "
-           Write-Host "GITHUB_ACTION: $env:GITHUB_ACTION"
-           Write-Host "GITHUB_ENV: $env:GITHUB_ENV"
-      - name: Set Up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "6.0.x"  
-      - name: Install Dependencies
-        run: |
-          cd example-dotnet
-          dotnet restore .\example-dotnet.csproj
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+#       - name: output the github actor
+#         run: |
+#            write-host "This workflow was triggered by:${{github.actor}} "
+#            Write-Host "GITHUB_ACTION: $env:GITHUB_ACTION"
+#            Write-Host "GITHUB_ENV: $env:GITHUB_ENV"
+#       - name: Set Up .NET
+#         uses: actions/setup-dotnet@v4
+#         with:
+#           dotnet-version: "6.0.x"  
+#       - name: Install Dependencies
+#         run: |
+#           cd example-dotnet
+#           dotnet restore .\example-dotnet.csproj
 
-      - name: Build Step
-        run: |
-          cd example-dotnet
-          dir
-          dotnet build --configuration Debug 
+#       - name: Build Step
+#         run: |
+#           cd example-dotnet
+#           dir
+#           dotnet build --configuration Debug 
 
-      - name: Publish Step
-        run: |
-          dotnet publish example-dotnet/example-dotnet.csproj -c Debug -o example-dotnet/publish
+#       - name: Publish Step
+#         run: |
+#           dotnet publish example-dotnet/example-dotnet.csproj -c Debug -o example-dotnet/publish
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: exam-artifacts
-          path: example-dotnet/publish/**
-          if-no-files-found: error
-  deploy:
-      needs: build
-      runs-on: windows-latest
-      environment: 
-        name: production
-        url: ${{steps.link.outputs.webapp-url}}
+#       - name: Upload Artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: exam-artifacts
+#           path: example-dotnet/publish/**
+#           if-no-files-found: error
+#   deploy:
+#       needs: build
+#       runs-on: windows-latest
+#       environment: 
+#         name: production
+#         url: ${{steps.link.outputs.webapp-url}}
       
-      steps:
-        - name: Download Artifact
-          uses: actions/Download-artifact@v4
-          with:
-            name: exam-artifacts
-            path: it the path that the downloaded artifact will be kept 
-        - name: Webdeploy step
-          id: link
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: ${{env.WEBAPP_NAME}}
-            publish-profile: ${{ secrets.PRODUCTION_SECRET }}
-            package: "."
+#       steps:
+#         - name: Download Artifact
+#           uses: actions/Download-artifact@v4
+#           with:
+#             name: exam-artifacts
+#             path: it the path that the downloaded artifact will be kept 
+#         - name: Webdeploy step
+#           id: link
+#           uses: azure/webapps-deploy@v2
+#           with:
+#             app-name: ${{env.WEBAPP_NAME}}
+#             publish-profile: ${{ secrets.PRODUCTION_SECRET }}
+#             package: "."
 
-        - name: display done  deploying in to azure 
-          run : |
-            write-host " deploy in to azure"
+#         - name: display done  deploying in to azure 
+#           run : |
+#             write-host " deploy in to azure"
     
 
 
