@@ -57,11 +57,11 @@ jobs:
           dir "$env:GITHUB_WORKSPACE"
       - name: Publish build artifact
         run: |
-           dotnet publish example-dotnet/example-dotnet.csproj -c Debug -o "${{env.DOTNET_ROOT}}/SimpleWebAppMVC"
+           dotnet publish example-dotnet/example-dotnet.csproj -c Debug -o "${{env.DOTNET_ROOT}}\example-dotnet"
       - name: List published files
         run: |
-          Write-Host "Listing files in ${{env.DOTNET_ROOT}}/SimpleWebAppMVC"
-          dir "$env:GITHUB_WORKSPACE/SimpleWebAppMVC"
+          Write-Host "Listing files in ${{env.DOTNET_ROOT}}\example-dotnet"
+          dir "$env:GITHUB_WORKSPACE/example-dotnet"
       - name: Value of env.DOTNET_ROOT AGAIN
         run: |
           Write-Host "DOTNET_ROOT is ${{env.DOTNET_ROOT}}"
