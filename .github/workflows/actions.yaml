@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  WEBAPP_NAME: web-example
+  WEBAPP_NAME: dotnet-example
 
 jobs:
   build:
